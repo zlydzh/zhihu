@@ -6,6 +6,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.ListView;
 
+import com.google.gson.Gson;
+import com.zly.Util.Latest;
 import com.zly.Util.News;
 import com.zly.fragment.NewsAdapter;
 
@@ -28,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
     private LinkedList<News> mDataList;
     private NewsAdapter mAdapter;
     private OkHttpClient mOkHttpClient;
+    private Latest latest;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
             public void onResponse(Call call, Response response) throws IOException {
                 String htmlStr =  response.body().string();
                 Log.d(TAG, "zly --> onResponse :" + htmlStr);
-                JSONObject jsonObj =
+                parseJson(htmlStr);
             }
         });
 
@@ -75,6 +78,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void refreshData() {
+
+    }
+
+    private void parseJson(String string) {
+        Gson gson = new Gson();
+        latest = gson.fromJson(string, Latest.class);
 
     }
 }
