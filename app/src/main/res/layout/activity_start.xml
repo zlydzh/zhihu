@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.zly.activity.StartActivity">
+
+    <ImageView
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:id="@+id/welcome"
+        android:src="@mipmap/welcome" />
+
+    <LinearLayout
+        android:layout_height="60dp"
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:background="@android:color/black"
+        android:layout_alignParentBottom="true" >
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left|center_vertical"
+            android:layout_marginLeft="20dp"
+            android:src="@mipmap/topbar_icon"/>
+
+        <LinearLayout
+            android:layout_height="match_parent"
+            android:layout_width="fill_parent"
+            android:gravity="center_vertical"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:text="@string/title"
+                android:layout_marginLeft="10dp"
+                android:textSize="@dimen/titleSize"/>
+
+            <TextView
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:text="@string/titleContent"
+                android:layout_marginLeft="10dp"
+                android:textSize="@dimen/titleContentSize"/>
+        </LinearLayout>
+    </LinearLayout>
+</RelativeLayout>
