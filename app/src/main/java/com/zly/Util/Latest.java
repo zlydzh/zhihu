@@ -1,141 +1,149 @@
 package com.zly.Util;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by Administrator on 2016/9/19.
  */
-public class Latest {
-    private LinkedList<StoriesEntity> mStoriesLinkedList;
-    private ArrayList<TopStoriesEntity> mTopStoriesArrayList;
+public class Latest implements Serializable {
+    private List<TopStoriesEntity> top_stories;
+    private List<StoriesEntity> stories;
+    private String date;
 
-    public LinkedList<StoriesEntity> getStoriesLinkedList() {
-        return mStoriesLinkedList;
+    public List<TopStoriesEntity> getTop_stories() {
+        return top_stories;
     }
 
-    public void setStoriesLinkedList(LinkedList<StoriesEntity> mStoriesLinkedList) {
-        this.mStoriesLinkedList = mStoriesLinkedList;
+    public void setTop_stories(List<TopStoriesEntity> top_stories) {
+        this.top_stories = top_stories;
     }
 
-    public ArrayList<TopStoriesEntity> getTopStoriesArrayList() {
-        return mTopStoriesArrayList;
+    public List<StoriesEntity> getStories() {
+        return stories;
     }
 
-    public void setTopStoriesArrayList(ArrayList<TopStoriesEntity> mTopStoriesArrayList) {
-        this.mTopStoriesArrayList = mTopStoriesArrayList;
+    public void setStories(List<StoriesEntity> stories) {
+        this.stories = stories;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
     }
 
     public static class StoriesEntity {
-        private List<String> mImage;
-        private String mType;
-        private String mId;
-        private String mGa_prefix;
-        private String mTitle;
+        private List<String> images;
+        private int type;
+        private int id;
+        private String ga_prefix;
+        private String title;
 
-        public List<String> getmImage() {
-            return mImage;
+        public List<String> getImages() {
+            return images;
         }
 
-        public void setmImage(List<String> mImage) {
-            this.mImage = mImage;
+        public void setImages(List<String> images) {
+            this.images = images;
         }
 
-        public String getmType() {
-            return mType;
+        public int getId() {
+            return id;
         }
 
-        public void setmType(String mType) {
-            this.mType = mType;
+        public void setId(int id) {
+            this.id = id;
         }
 
-        public String getmId() {
-            return mId;
+        public int getType() {
+            return type;
         }
 
-        public void setmId(String mId) {
-            this.mId = mId;
+        public void setType(int type) {
+            this.type = type;
         }
 
-        public String getmGa_prefix() {
-            return mGa_prefix;
+        public String getGa_prefix() {
+            return ga_prefix;
         }
 
-        public void setmGa_prefix(String mGa_prefix) {
-            this.mGa_prefix = mGa_prefix;
+        public void setGa_prefix(String ga_prefix) {
+            this.ga_prefix = ga_prefix;
         }
 
-        public String getmTitle() {
-            return mTitle;
+        public String getTitle() {
+            return title;
         }
 
-        public void setmTitle(String mTitle) {
-            this.mTitle = mTitle;
+        public void setTitle(String title) {
+            this.title = title;
         }
 
         public String toString() {
-            return "image: " + mImage +
-                    " type: " + mType +
-                    " id: " + mId +
-                    " ga_prefix: "  + mGa_prefix +
-                    " title: " + mTitle;
+            return "image: " + images +
+                    " type: " + type +
+                    " id: " + id +
+                    " ga_prefix: "  + ga_prefix +
+                    " title: " + title;
         }
     }
 
     public static class TopStoriesEntity {
-        private String mImage;
-        private String mType;
-        private String mId;
-        private String mGa_prefix;
-        private String mTitle;
+        private String image;
+        private int type;
+        private int id;
+        private String ga_prefix;
+        private String title;
 
-        public String getmImage() {
-            return mImage;
+        public String getImage() {
+            return image;
         }
 
-        public void setmImage(String mImage) {
-            this.mImage = mImage;
+        public void setImage(String image) {
+            this.image = image;
         }
 
-        public String getmType() {
-            return mType;
+        public int getType() {
+            return type;
         }
 
-        public void setmType(String mType) {
-            this.mType = mType;
+        public void setType(int type) {
+            this.type = type;
         }
 
-        public String getmId() {
-            return mId;
+        public int getId() {
+            return id;
         }
 
-        public void setmId(String mId) {
-            this.mId = mId;
+        public void setId(int id) {
+            this.id = id;
         }
 
-        public String getmGa_prefix() {
-            return mGa_prefix;
+        public String getGa_prefix() {
+            return ga_prefix;
         }
 
-        public void setmGa_prefix(String mGa_prefix) {
-            this.mGa_prefix = mGa_prefix;
+        public void setGa_prefix(String ga_prefix) {
+            this.ga_prefix = ga_prefix;
         }
 
-        public String getmTitle() {
-            return mTitle;
+        public String getTitle() {
+            return title;
         }
 
-        public void setmTitle(String mTitle) {
-            this.mTitle = mTitle;
+        public void setTitle(String title) {
+            this.title = title;
         }
 
         public String toString() {
-            return "image: " + mImage +
-                    " type: " + mType +
-                    " id: " + mId +
-                    " ga_prefix: "  + mGa_prefix +
-                    " title: " + mTitle;
+            return "image: " + image +
+                    " type: " + type +
+                    " id: " + id +
+                    " ga_prefix: "  + ga_prefix +
+                    " title: " + title;
         }
     }
 }
