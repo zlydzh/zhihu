@@ -52,6 +52,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
     private List<View> topPhoto;
     private String htmlStr;
     private List<Latest.TopStoriesEntity> topStoriesEntities;
+    private int currentItem = 0;
+    private boolean isAutoPlay= true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -139,12 +141,11 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
         ImageView iv = null;
         TextView iv_title = null;
-        for (int i = 0; i < topLen + 1; i++) {
+        for (int i = 0; i < topLen; i++) {
             View topImageAndText = LayoutInflater.from(MainActivity.this).inflate(R.layout.top_content_layout, null);
             iv = (ImageView)topImageAndText.findViewById(R.id.iv);
             iv_title = (TextView)topImageAndText.findViewById(R.id.iv_title);
-
-            if (0 == i) {
+            /*if (0 == i) {
                 Glide.with(MainActivity.this)
                         .load(latest.getTop_stories().get(topLen - 1).getImage())
                         .into(iv);
@@ -159,13 +160,21 @@ public class MainActivity extends Activity implements View.OnClickListener {
                     .load(latest.getTop_stories().get(i - 1).getImage())
                     .into(iv);
                 iv_title.setText(latest.getTop_stories().get(i - 1).getTitle());
-            }
+            }*/
+            Glide.with(MainActivity.this)
+                    .load(latest.getTop_stories().get(i).getImage())
+                    .into(iv);
+            iv_title.setText(latest.getTop_stories().get(i).getTitle());
+
             topImageAndText.setOnClickListener(MainActivity.this);
             topPhoto.add(topImageAndText);
         }
 
         vp.setAdapter(new myPagerAdapter());
+        vp.setFocusable(true);
+        vp.setCurrentItem(0);
         vp.addOnPageChangeListener(new myOnPageChangeListener());
+        startPLay();
         //mAdapter = new NewsAdapter(MainActivity.this, mDataList);
         //mListView.setAdapter(mAdapter);
     }
@@ -199,17 +208,27 @@ public class MainActivity extends Activity implements View.OnClickListener {
         }
     }
 
-    class myOnPageChangeListener implements ViewPager.OnPageChangeListener {
+    public class myOnPageChangeListener implements ViewPager.OnPageChangeListener {
 
+        /**
+         * 当页面在滑动的时候会调用此方法，在滑动被停止之前，此方法回一直得到
+         * 调用。其中三个参数的含义分别为：
+         * position :当前页面，及你点击滑动的页面
+         * positionOffset:当前页面偏移的百分比
+         * positionOffsetPixels:当前页面偏移的像素位置
+         */
         @Override
         public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
         }
 
+        /**
+         * 此方法是页面跳转完后得到调用，arg0是你当前选中的页面的Position
+         */
         @Override
         public void onPageSelected(int position) {
             for (int i = 0; i < ll_dots.size(); i++) {
-                if (i == position - 1) {
+                if (i == position) {
                     ll_dots.get(i).setImageResource(R.drawable.dot_focus);
                 } else {
                     ll_dots.get(i).setImageResource(R.drawable.dot_blur);
@@ -217,28 +236,60 @@ public class MainActivity extends Activity implements View.OnClickListener {
             }
         }
 
+        /**
+         * state ==1的时辰默示正在滑动，state==2的时辰默示滑动完毕了，state==0的时辰默示什么都没做。
+         * 使用中发现即使是自动切换图片也会调用state==2的状态，只有state == 1没有调用，也就表示state==1时是用户进行切换图片。
+         */
         @Override
         public void onPageScrollStateChanged(int state) {
             Log.d(TAG, "zly --> currentItem:" + vp.getCurrentItem() + " state: " + state);
-            switch (state) {
+            switch (state){
+                case 0:
+                    if (!isAutoPlay) {
+                        if (vp.getCurrentItem() == 0) {
+                            vp.setCurrentItem(latest.getTop_stories().size(), false);
+                        } else if (vp.getCurrentItem() == latest.getTop_stories().size()) {
+                            vp.setCurrentItem(0);
+                        }
+                        currentItem = vp.getCurrentItem();
+                    }
+                    break;
                 case 1:
-//                    isAutoPlay = false;
+                    isAutoPlay = false;
                     break;
                 case 2:
-//                    isAutoPlay = true;
-                    break;
-                case 0:
-                    Log.d(TAG, "zly --> currentItem:" + vp.getCurrentItem());
-                    if (vp.getCurrentItem() == 0) {
-                        vp.setCurrentItem(latest.getTop_stories().size(), false);
-                    } else if (vp.getCurrentItem() == latest.getTop_stories().size() + 1) {
-                        vp.setCurrentItem(1, false);
-                    }
-//                    currentItem = vp.getCurrentItem();
-//                    isAutoPlay = true;
+                    isAutoPlay = true;
                     break;
             }
         }
     }
 
+    private void startPLay() {
+        isAutoPlay = true;
+        mHandler.postDelayed(task, 3000);
+    }
+
+    private final Runnable task = new Runnable() {
+        @Override
+        public void run() {
+            if (isAutoPlay) {
+                mHandler.postDelayed(task, 3000);
+                Log.d(TAG, "zly --> currentItem:" + currentItem);
+                if (currentItem < latest.getTop_stories().size()) {
+                    currentItem++;
+                } else {
+                    currentItem = 0;
+                }
+                vp.setCurrentItem(currentItem);
+            } else {
+                mHandler.postDelayed(task, 3000);
+            }
+        }
+    };
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mHandler.removeCallbacks(task);
+    }
 }
