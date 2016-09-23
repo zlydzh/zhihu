@@ -27,6 +27,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.w3c.dom.Text;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -57,6 +59,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
     private List<Latest.TopStoriesEntity> topStoriesEntities;
     private int currentItem = 0;
     private boolean isAutoPlay= true;
+    private View kanner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,20 +70,24 @@ public class MainActivity extends Activity implements View.OnClickListener {
     }
 
     private void initView() {
-        mSwipeRefreshLayout = (SwipeRefreshLayout)findViewById(R.id.swipeLayout);
-        mSwipeRefreshLayout.setProgressBackgroundColorSchemeResource(android.R.color.white);
-        mSwipeRefreshLayout.setColorSchemeResources(android.R.color.holo_blue_light);
-        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                refreshData();
-            }
-        });
-//        mListView = (ListView)findViewById(R.id.newsList);
-        vp = (ViewPager)findViewById(R.id.vp);
-        ll_dot = (LinearLayout)findViewById(R.id.ll_dot);
-    }
+//        mSwipeRefreshLayout = (SwipeRefreshLayout)findViewById(R.id.swipeLayout);
+//        mSwipeRefreshLayout.setProgressBackgroundColorSchemeResource(android.R.color.white);
+//        mSwipeRefreshLayout.setColorSchemeResources(android.R.color.holo_blue_light);
+//        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+//            @Override
+//            public void onRefresh() {
+//                refreshData();
+//            }
+//        });
 
+        mListView = (ListView)findViewById(R.id.newsList);
+        kanner = (View)getLayoutInflater().inflate(R.layout.list_head_layout, mListView, false);
+        TextView test = (TextView)kanner.findViewById(R.id.textTest);
+        test.setText("No abc.");
+        mListView.addHeaderView(kanner);
+       // vp = (ViewPager)kanner.findViewById(R.id.vp);
+        //ll_dot = (LinearLayout)kanner.findViewById(R.id.ll_dot);
+    }
     private void initData() {
         topPhoto = new ArrayList<View>();
         ll_dots = new ArrayList<ImageView>();
@@ -100,8 +107,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
             public void onResponse(Call call, Response response) throws IOException {
                 htmlStr =  response.body().string();
                 Log.d(TAG, "zly --> onResponse :" + htmlStr);
-//                parseJson(htmlStr);
-                mHandler.sendEmptyMessage(UPDATE_DATA);
+               // mHandler.sendEmptyMessage(UPDATE_DATA);
             }
         });
     }
@@ -117,6 +123,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
             super.handleMessage(msg);
         }
     };
+
     private void refreshData() {
 
     }
@@ -147,22 +154,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
             View topImageAndText = LayoutInflater.from(MainActivity.this).inflate(R.layout.top_content_layout, null);
             iv = (ImageView)topImageAndText.findViewById(R.id.iv);
             iv_title = (TextView)topImageAndText.findViewById(R.id.iv_title);
-            /*if (0 == i) {
-                Glide.with(MainActivity.this)
-                        .load(latest.getTop_stories().get(topLen - 1).getImage())
-                        .into(iv);
-                iv_title.setText(latest.getTop_stories().get(topLen - 1).getTitle());
-            } else if (i == topLen + 1) {
-                Glide.with(MainActivity.this)
-                    .load(latest.getTop_stories().get(0).getImage())
-                    .into(iv);
-                iv_title.setText(latest.getTop_stories().get(0).getTitle());
-            } else {
-                Glide.with(MainActivity.this)
-                    .load(latest.getTop_stories().get(i - 1).getImage())
-                    .into(iv);
-                iv_title.setText(latest.getTop_stories().get(i - 1).getTitle());
-            }*/
+
             Glide.with(MainActivity.this)
                     .load(latest.getTop_stories().get(i).getImage())
                     .into(iv);
@@ -171,19 +163,17 @@ public class MainActivity extends Activity implements View.OnClickListener {
             topImageAndText.setOnClickListener(MainActivity.this);
             topPhoto.add(topImageAndText);
         }
-
         vp.setAdapter(new myPagerAdapter());
         vp.setFocusable(true);
         vp.setCurrentItem(0);
         vp.addOnPageChangeListener(new myOnPageChangeListener());
-        startPLay();
+        startPlay();
         //mAdapter = new NewsAdapter(MainActivity.this, mDataList);
         //mListView.setAdapter(mAdapter);
     }
 
     @Override
     public void onClick(View v) {
-        Log.d(TAG, "zly --> top onClick.");
         Toast.makeText(this, "current item is " + vp.getCurrentItem(), Toast.LENGTH_SHORT).show();
     }
 
@@ -266,7 +256,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
         }
     }
 
-    private void startPLay() {
+    private void startPlay() {
         isAutoPlay = true;
         mHandler.postDelayed(task, 3000);
     }
