@@ -9,6 +9,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -20,6 +21,8 @@ import com.google.gson.Gson;
 import com.zly.Util.Latest;
 import com.zly.Util.News;
 import com.zly.fragment.NewsAdapter;
+import com.zly.view.VpSwipeRefreshLayout;
+
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -73,7 +76,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 refreshData();
             }
         });
-        mListView = (ListView)findViewById(R.id.newsList);
+//        mListView = (ListView)findViewById(R.id.newsList);
         vp = (ViewPager)findViewById(R.id.vp);
         ll_dot = (LinearLayout)findViewById(R.id.ll_dot);
     }
@@ -122,8 +125,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
         Gson gson = new Gson();
         latest = gson.fromJson(string, Latest.class);
         String data = latest.getDate();
-//        topStoriesEntities = latest.getTop_stories();
-//        Log.d(TAG, "zly --> topStoriesEntities: " + topStoriesEntities.toString());
+
         ImageView imageView = null;
         int topLen = latest.getTop_stories().size();
         Log.d(TAG, "zly --> topLen:" + topLen);
