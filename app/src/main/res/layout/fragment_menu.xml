@@ -18,7 +18,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@mipmap/ic_login"
-            android:layout_marginLeft="20dp"/>
+            android:layout_marginLeft="20dp"
+            tools:ignore="ContentDescription" />
 
         <Button
             android:layout_width="wrap_content"
@@ -48,7 +49,8 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/start"
                 android:src="@mipmap/ic_star"
-                android:layout_marginLeft="20dp"/>
+                android:layout_marginLeft="20dp"
+                tools:ignore="ContentDescription" />
 
             <Button
                 android:layout_width="wrap_content"
@@ -70,7 +72,8 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@mipmap/ic_download"/>
+                android:src="@mipmap/ic_download"
+                tools:ignore="ContentDescription" />
 
             <Button
                 android:layout_width="wrap_content"

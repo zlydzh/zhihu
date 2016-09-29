@@ -57,6 +57,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
     private List<View> topPhoto;
     private String htmlStr;
     private List<Latest.TopStoriesEntity> topStoriesEntities;
+    private List<Latest.StoriesEntity> mStoriesEntityList;
     private int currentItem = 0;
     private boolean isAutoPlay= true;
     private View kanner;
@@ -70,28 +71,31 @@ public class MainActivity extends Activity implements View.OnClickListener {
     }
 
     private void initView() {
-//        mSwipeRefreshLayout = (SwipeRefreshLayout)findViewById(R.id.swipeLayout);
-//        mSwipeRefreshLayout.setProgressBackgroundColorSchemeResource(android.R.color.white);
-//        mSwipeRefreshLayout.setColorSchemeResources(android.R.color.holo_blue_light);
-//        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-//            @Override
-//            public void onRefresh() {
-//                refreshData();
-//            }
-//        });
+        mSwipeRefreshLayout = (SwipeRefreshLayout)findViewById(R.id.swipeLayout);
+        mSwipeRefreshLayout.setProgressBackgroundColorSchemeResource(android.R.color.white);
+        mSwipeRefreshLayout.setColorSchemeResources(android.R.color.holo_blue_light);
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                refreshData();
+            }
+        });
 
         mListView = (ListView)findViewById(R.id.newsList);
         kanner = (View)getLayoutInflater().inflate(R.layout.list_head_layout, mListView, false);
-        TextView test = (TextView)kanner.findViewById(R.id.textTest);
-        test.setText("No abc.");
-        mListView.addHeaderView(kanner);
-       // vp = (ViewPager)kanner.findViewById(R.id.vp);
-        //ll_dot = (LinearLayout)kanner.findViewById(R.id.ll_dot);
+
+        mListView.addHeaderView(kanner, null, true);
+        vp = (ViewPager)kanner.findViewById(R.id.vp);
+        ll_dot = (LinearLayout)kanner.findViewById(R.id.ll_dot);
+        mStoriesEntityList = new ArrayList<Latest.StoriesEntity>();
+        mAdapter = new NewsAdapter(MainActivity.this, mStoriesEntityList);
+        mListView.setAdapter(mAdapter);
     }
+
     private void initData() {
         topPhoto = new ArrayList<View>();
         ll_dots = new ArrayList<ImageView>();
-        topStoriesEntities = new ArrayList<>();
+        topStoriesEntities = new ArrayList<Latest.TopStoriesEntity>();
         mOkHttpClient = new OkHttpClient();
         final Request request = new Request.Builder()
                 .url("http://news-at.zhihu.com/api/4/news/latest")
@@ -107,7 +111,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
             public void onResponse(Call call, Response response) throws IOException {
                 htmlStr =  response.body().string();
                 Log.d(TAG, "zly --> onResponse :" + htmlStr);
-               // mHandler.sendEmptyMessage(UPDATE_DATA);
+                mHandler.sendEmptyMessage(UPDATE_DATA);
             }
         });
     }
@@ -132,6 +136,9 @@ public class MainActivity extends Activity implements View.OnClickListener {
         Gson gson = new Gson();
         latest = gson.fromJson(string, Latest.class);
         String data = latest.getDate();
+        Log.d(TAG, "zly --> data: " + data);
+        topStoriesEntities =  latest.getTop_stories();
+        mStoriesEntityList = latest.getStories();
 
         ImageView imageView = null;
         int topLen = latest.getTop_stories().size();
@@ -168,8 +175,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
         vp.setCurrentItem(0);
         vp.addOnPageChangeListener(new myOnPageChangeListener());
         startPlay();
-        //mAdapter = new NewsAdapter(MainActivity.this, mDataList);
-        //mListView.setAdapter(mAdapter);
+        mAdapter.addList(mStoriesEntityList);
     }
 
     @Override
