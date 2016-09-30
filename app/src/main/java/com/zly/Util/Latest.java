@@ -35,7 +35,7 @@ public class Latest implements Serializable {
         this.date = date;
     }
 
-    public static class StoriesEntity {
+    public static class StoriesEntity implements Serializable {
         private List<String> images;
         private int type;
         private int id;

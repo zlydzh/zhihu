@@ -1,9 +1,11 @@
 package com.zly.activity;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.os.Parcelable;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -12,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -90,6 +93,17 @@ public class MainActivity extends Activity implements View.OnClickListener {
         mStoriesEntityList = new ArrayList<Latest.StoriesEntity>();
         mAdapter = new NewsAdapter(MainActivity.this, mStoriesEntityList);
         mListView.setAdapter(mAdapter);
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Latest.StoriesEntity entity = (Latest.StoriesEntity) parent.getAdapter().getItem(position);
+                Intent intent = new Intent(MainActivity.this, LatestContentActivity.class);
+                intent.putExtra("entity",  entity);
+                startActivity(intent);
+                MainActivity.this.overridePendingTransition(0, 0);
+
+            }
+        });
     }
 
     private void initData() {
